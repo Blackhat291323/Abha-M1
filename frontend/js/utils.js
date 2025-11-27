@@ -1,9 +1,9 @@
 // API Configuration - change this when deploying
 // For local development: http://localhost:5000/api
-// For production: https://your-backend.vercel.app/api
+// For production: https://abham1.vercel.app/api
 const API_BASE_URL = window.location.hostname === 'localhost' 
   ? 'http://localhost:5000/api' 
-  : 'https://abham1-ny0jitxlt-blackhat291323s-projects.vercel.app/api';
+  : 'https://abham1.vercel.app/api';
 
 /**
  * Show toast notification
