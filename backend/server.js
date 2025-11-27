@@ -21,15 +21,28 @@ const PORT = process.env.PORT || 5000;
 app.use(helmet());
 
 // CORS configuration - allow Netlify frontend
+const allowedOrigins = [
+  'https://abha-m1.netlify.app',
+  'http://localhost:8000',
+  'http://localhost:5000',
+  'http://127.0.0.1:8000'
+];
+
 const corsOptions = {
-  origin: process.env.NODE_ENV === 'production' 
-    ? [
-        'https://abha-m1.netlify.app',
-        'http://localhost:8000' // for local testing
-      ]
-    : '*', // Allow all in development
+  origin: function (origin, callback) {
+    // Allow requests with no origin (like mobile apps, Postman, curl)
+    if (!origin) return callback(null, true);
+    
+    if (allowedOrigins.indexOf(origin) !== -1 || process.env.NODE_ENV !== 'production') {
+      callback(null, true);
+    } else {
+      callback(new Error('Not allowed by CORS'));
+    }
+  },
   credentials: true,
-  optionsSuccessStatus: 200
+  optionsSuccessStatus: 200,
+  methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'],
+  allowedHeaders: ['Content-Type', 'Authorization', 'X-Requested-With']
 };
 app.use(cors(corsOptions));
 
