@@ -26,7 +26,7 @@ router.post('/send-otp', async (req, res, next) => {
     }
 
     // Encrypt Aadhaar
-    const encryptedAadhaar = encryptAadhaar(validation.aadhaar);
+    const encryptedAadhaar = await encryptAadhaar(validation.aadhaar);
 
     // Send OTP request
     const response = await abdmClient.post(ENDPOINTS.SEND_OTP, {
@@ -87,7 +87,7 @@ router.post('/verify-otp', async (req, res, next) => {
     }
 
     // Encrypt OTP
-    const encryptedOTP = encryptOTP(otpValidation.otp);
+    const encryptedOTP = await encryptOTP(otpValidation.otp);
 
     // Verify OTP and create ABHA
     const response = await abdmClient.post(ENDPOINTS.VERIFY_OTP, {
@@ -213,7 +213,7 @@ router.post('/mobile/verify-otp', async (req, res, next) => {
       return res.status(400).json({ success: false, error: { code: 'VALIDATION_ERROR', message: otpValidation.message } });
     }
 
-    const encryptedOTP = encryptOTP(otpValidation.otp);
+    const encryptedOTP = await encryptOTP(otpValidation.otp);
 
     const response = await abdmClient.post('/abha/api/v3/enrollment/auth/byAbdm', {
       scope: SCOPES.MOBILE_VERIFY,

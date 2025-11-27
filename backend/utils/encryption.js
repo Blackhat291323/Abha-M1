@@ -2,23 +2,36 @@ const forge = require('node-forge');
 const fs = require('fs');
 const path = require('path');
 
+let cachedPublicKey = null;
+
 /**
- * Get public key from .env or file
+ * Get public key from .env, file, or ABDM API
  */
-function getPublicKey() {
+async function getPublicKey() {
   try {
+    // Return cached key if available
+    if (cachedPublicKey) {
+      return cachedPublicKey;
+    }
+
     // Try to get from .env first
     if (process.env.PUBLIC_KEY) {
-      return process.env.PUBLIC_KEY;
+      cachedPublicKey = process.env.PUBLIC_KEY;
+      return cachedPublicKey;
     }
     
     // Try to read from public-key.pem file
     const keyPath = process.env.PUBLIC_KEY_PATH || path.join(__dirname, '../public-key.pem');
     if (fs.existsSync(keyPath)) {
-      return fs.readFileSync(keyPath, 'utf8');
+      cachedPublicKey = fs.readFileSync(keyPath, 'utf8');
+      return cachedPublicKey;
     }
     
-    throw new Error('Public key not found. Please set PUBLIC_KEY in .env or create public-key.pem');
+    // Fetch from ABDM API as last resort
+    console.log('⚠️ No local public key found, fetching from ABDM...');
+    const abdmClient = require('./abdm');
+    cachedPublicKey = await abdmClient.getPublicKey();
+    return cachedPublicKey;
   } catch (error) {
     console.error('❌ Error loading public key:', error.message);
     throw error;
@@ -30,9 +43,9 @@ function getPublicKey() {
  * @param {string} data - Plain text to encrypt
  * @returns {string} - Base64 encoded encrypted data
  */
-function encryptWithPublicKey(data) {
+async function encryptWithPublicKey(data) {
   try {
-    const publicKeyPem = getPublicKey();
+    const publicKeyPem = await getPublicKey();
     const publicKey = forge.pki.publicKeyFromPem(publicKeyPem);
     
     // Encrypt the data using RSA-OAEP with SHA-1 (ABDM requirement)
@@ -57,11 +70,11 @@ function encryptWithPublicKey(data) {
  * @param {string} aadhaar - 12 digit Aadhaar number
  * @returns {string} - Encrypted Aadhaar
  */
-function encryptAadhaar(aadhaar) {
+async function encryptAadhaar(aadhaar) {
   if (!aadhaar || aadhaar.length !== 12) {
     throw new Error('Invalid Aadhaar number. Must be 12 digits.');
   }
-  return encryptWithPublicKey(aadhaar);
+  return await encryptWithPublicKey(aadhaar);
 }
 
 /**
@@ -69,11 +82,11 @@ function encryptAadhaar(aadhaar) {
  * @param {string} otp - OTP value
  * @returns {string} - Encrypted OTP
  */
-function encryptOTP(otp) {
+async function encryptOTP(otp) {
   if (!otp || otp.length !== 6) {
     throw new Error('Invalid OTP. Must be 6 digits.');
   }
-  return encryptWithPublicKey(otp);
+  return await encryptWithPublicKey(otp);
 }
 
 /**

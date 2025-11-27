@@ -86,6 +86,32 @@ class ABDMClient {
   }
 
   /**
+   * Get public key for encryption from ABDM
+   */
+  async getPublicKey() {
+    try {
+      await this.getAccessToken();
+
+      const url = `${this.abdmBaseUrl}${ENDPOINTS.CERT}`;
+      const headers = this.getHeaders(true);
+
+      console.log('🔐 Fetching ABDM public certificate...');
+
+      const response = await axios.get(url, { headers });
+      
+      if (response.data && response.data.certificate) {
+        console.log('✅ Public certificate obtained');
+        return response.data.certificate;
+      }
+      
+      throw new Error('Certificate not found in response');
+    } catch (error) {
+      console.error('❌ Failed to get certificate:', error.response?.data || error.message);
+      throw new Error('Failed to fetch ABDM public certificate');
+    }
+  }
+
+  /**
    * Make a POST request to ABDM API
    */
   async post(endpoint, data, additionalHeaders = {}) {
