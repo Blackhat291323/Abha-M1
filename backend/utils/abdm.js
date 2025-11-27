@@ -46,8 +46,8 @@ class ABDMClient {
       const response = await axios.post(
         `${this.abdmBaseUrl}${ENDPOINTS.SESSION}`,
         {
-          clientId: process.env.CLIENT_ID,
-          clientSecret: process.env.CLIENT_SECRET,
+          clientId: process.env.ABDM_CLIENT_ID || process.env.CLIENT_ID,
+          clientSecret: process.env.ABDM_CLIENT_SECRET || process.env.CLIENT_SECRET,
           grantType: 'client_credentials'
         },
         {
