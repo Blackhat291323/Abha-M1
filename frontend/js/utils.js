@@ -3,7 +3,7 @@
 // For production: https://your-backend.onrender.com/api
 const API_BASE_URL = window.location.hostname === 'localhost' 
   ? 'http://localhost:5000/api' 
-  : 'https://abha-m1-backend.onrender.com'; // UPDATE THIS AFTER DEPLOYING BACKEND
+  : 'https://abha-m1-backend.onrender.com/api';
 
 /**
  * Show toast notification
