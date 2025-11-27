@@ -3,7 +3,7 @@
 // For production: https://your-backend.vercel.app/api
 const API_BASE_URL = window.location.hostname === 'localhost' 
   ? 'http://localhost:5000/api' 
-  : 'https://abham1-del2cq29n-blackhat291323s-projects.vercel.app/api';
+  : 'https://abham1-ny0jitxlt-blackhat291323s-projects.vercel.app/api';
 
 /**
  * Show toast notification
