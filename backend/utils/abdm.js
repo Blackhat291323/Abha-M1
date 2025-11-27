@@ -41,13 +41,23 @@ class ABDMClient {
         return this.accessToken;
       }
 
+      const clientId = process.env.ABDM_CLIENT_ID || process.env.CLIENT_ID;
+      const clientSecret = process.env.ABDM_CLIENT_SECRET || process.env.CLIENT_SECRET;
+
+      // Check if credentials are set
+      if (!clientId || !clientSecret) {
+        console.error('❌ Missing ABDM credentials. Please set ABDM_CLIENT_ID and ABDM_CLIENT_SECRET environment variables.');
+        throw new Error('ABDM credentials not configured. Please contact administrator.');
+      }
+
       console.log('🔑 Fetching new access token...');
+      console.log(`📍 Using Client ID: ${clientId.substring(0, 8)}...`);
 
       const response = await axios.post(
         `${this.abdmBaseUrl}${ENDPOINTS.SESSION}`,
         {
-          clientId: process.env.ABDM_CLIENT_ID || process.env.CLIENT_ID,
-          clientSecret: process.env.ABDM_CLIENT_SECRET || process.env.CLIENT_SECRET,
+          clientId: clientId,
+          clientSecret: clientSecret,
           grantType: 'client_credentials'
         },
         {
@@ -68,7 +78,10 @@ class ABDMClient {
       return this.accessToken;
     } catch (error) {
       console.error('❌ Failed to get access token:', error.response?.data || error.message);
-      throw new Error('Failed to authenticate with ABDM');
+      if (error.response?.status === 401) {
+        throw new Error('Invalid ABDM credentials. Please check CLIENT_ID and CLIENT_SECRET.');
+      }
+      throw new Error('Failed to authenticate with ABDM: ' + (error.response?.data?.message || error.message));
     }
   }
 
