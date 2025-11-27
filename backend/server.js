@@ -24,7 +24,7 @@ app.use(helmet());
 const corsOptions = {
   origin: process.env.NODE_ENV === 'production' 
     ? [
-        'https://your-netlify-site.netlify.app', // UPDATE THIS
+        'https://abha-m1.netlify.app/', // UPDATE THIS
         'http://localhost:8000' // for local testing
       ]
     : '*', // Allow all in development
