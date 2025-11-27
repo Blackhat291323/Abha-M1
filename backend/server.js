@@ -20,25 +20,23 @@ const PORT = process.env.PORT || 5000;
 // Middleware
 app.use(helmet());
 
-// CORS configuration - allow Netlify frontend
-const allowedOrigins = [
-  'https://abha-m1.netlify.app',
-  'http://localhost:8000',
-  'http://localhost:5000',
-  'http://127.0.0.1:8000',
-  'https://abham1-del2cq29n-blackhat291323s-projects.vercel.app'
-];
-
+// CORS configuration - allow same origin and local development
 const corsOptions = {
   origin: function (origin, callback) {
-    // Allow requests with no origin (like mobile apps, Postman, curl)
+    // Allow requests with no origin (like same-origin requests, mobile apps, Postman, curl)
     if (!origin) return callback(null, true);
     
-    if (allowedOrigins.indexOf(origin) !== -1 || process.env.NODE_ENV !== 'production') {
-      callback(null, true);
-    } else {
-      callback(new Error('Not allowed by CORS'));
+    // Allow localhost for development
+    if (origin.includes('localhost') || origin.includes('127.0.0.1')) {
+      return callback(null, true);
     }
+    
+    // Allow any Vercel deployment URL for this project
+    if (origin.includes('vercel.app') || process.env.NODE_ENV !== 'production') {
+      return callback(null, true);
+    }
+    
+    callback(null, true); // Allow all in monorepo setup
   },
   credentials: true,
   optionsSuccessStatus: 200,

@@ -1,9 +1,7 @@
-// API Configuration - change this when deploying
-// For local development: http://localhost:5000/api
-// For production: https://abham1.vercel.app/api
+// API Configuration - Using relative path for same-domain deployment
 const API_BASE_URL = window.location.hostname === 'localhost' 
   ? 'http://localhost:5000/api' 
-  : 'https://abham1.vercel.app/api';
+  : '/api'; // Relative path - works on same domain
 
 /**
  * Show toast notification
