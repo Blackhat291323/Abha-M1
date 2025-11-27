@@ -1,0 +1,304 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Create ABHA Account | Ayushman Bharat</title>
+    <link rel="stylesheet" href="css/styles.css">
+</head>
+<body>
+    <!-- Header -->
+    <div class="header">
+        <h1>🏥 Ayushman Bharat Health Account</h1>
+        <p>Create your digital health identity in 3 simple steps</p>
+    </div>
+
+    <div class="container">
+        <!-- Tabs -->
+        <div class="tabs">
+            <button class="tab active" data-tab="enroll">Create New ABHA</button>
+            <button class="tab" data-tab="login">Login with Existing ABHA</button>
+        </div>
+
+        <!-- Enrollment Tab -->
+        <div id="enroll-tab" class="tab-content active">
+            <!-- Step Indicator -->
+            <div class="step-indicator">
+                <div class="step active" data-step="1">
+                    <div class="step-circle">1</div>
+                    <div class="step-label">Aadhaar OTP</div>
+                </div>
+                <div class="step" data-step="2">
+                    <div class="step-circle">2</div>
+                    <div class="step-label">Verify OTP</div>
+                </div>
+                <div class="step" data-step="3">
+                    <div class="step-circle">3</div>
+                    <div class="step-label">ABHA Address</div>
+                </div>
+            </div>
+
+            <!-- Step 1: Enter Aadhaar -->
+            <div id="step-1" class="card">
+                <h2 style="margin-bottom: 20px; color: var(--dark-blue);">Enter Aadhaar Number</h2>
+                <p class="help-text" style="margin-bottom: 20px;">OTP will be sent to your Aadhaar-linked mobile number</p>
+                
+                <form id="aadhaar-form">
+                    <div class="form-group">
+                        <label class="form-label">Aadhaar Number *</label>
+                        <input 
+                            type="text" 
+                            id="aadhaar-input" 
+                            class="form-input" 
+                            placeholder="Enter 12-digit Aadhaar number"
+                            maxlength="12"
+                            pattern="[0-9]{12}"
+                        >
+                        <div class="error-message" id="aadhaar-error"></div>
+                        <p class="help-text">Your Aadhaar is encrypted and secure</p>
+                    </div>
+                    
+                    <button type="submit" class="btn btn-primary" id="send-otp-btn">
+                        <span class="spinner"></span>
+                        <span class="btn-text">Send OTP</span>
+                    </button>
+                </form>
+            </div>
+
+            <!-- Step 2: Verify OTP (no mobile here) -->
+            <div id="step-2" class="card hidden">
+                <h2 style="margin-bottom: 20px; color: var(--dark-blue);">Verify OTP</h2>
+                <p class="help-text" style="margin-bottom: 20px;">Enter the 6-digit OTP sent to your Aadhaar-linked mobile</p>
+                
+                <form id="otp-form">
+                    <div class="form-group">
+                        <label class="form-label">Primary Mobile Number *</label>
+                        <input 
+                            type="tel" 
+                            id="primary-mobile-input" 
+                            class="form-input" 
+                            placeholder="Enter the mobile that received OTP"
+                            maxlength="10"
+                            pattern="[6-9][0-9]{9}"
+                            required
+                        >
+                        <small class="help-text">This will be your primary contact number for ABHA</small>
+                        <div class="error-message" id="mobile-error"></div>
+                    </div>
+
+                    <div class="form-group">
+                        <label class="form-label">Enter OTP *</label>
+                        <div class="otp-input-group">
+                            <input type="text" class="otp-digit" maxlength="1" data-index="0">
+                            <input type="text" class="otp-digit" maxlength="1" data-index="1">
+                            <input type="text" class="otp-digit" maxlength="1" data-index="2">
+                            <input type="text" class="otp-digit" maxlength="1" data-index="3">
+                            <input type="text" class="otp-digit" maxlength="1" data-index="4">
+                            <input type="text" class="otp-digit" maxlength="1" data-index="5">
+                        </div>
+                        <div class="error-message" id="otp-error"></div>
+                    </div>
+
+                    <div class="otp-timer">
+                        <span id="timer-text">Time remaining: <strong id="timer">05:00</strong></span>
+                        <span id="resend-container" class="hidden">
+                            <a href="#" class="resend-link" id="resend-otp">Resend OTP</a>
+                        </span>
+                    </div>
+                    
+                    <button type="submit" class="btn btn-primary" id="verify-otp-btn">
+                        <span class="spinner"></span>
+                        <span class="btn-text">Verify Aadhaar OTP</span>
+                    </button>
+                </form>
+            </div>
+            <!-- Step 2b: Verify Communication Mobile (optional) -->
+            <div id="step-2b" class="card hidden">
+                <h2 style="margin-bottom: 20px; color: var(--dark-blue);">Verify Your Mobile (Optional)</h2>
+                <p class="help-text" style="margin-bottom: 20px;">If your communication mobile differs from Aadhaar-linked mobile, verify it here.</p>
+
+                <form id="mobile-verify-form">
+                    <div class="form-group">
+                        <label class="form-label">Mobile Number</label>
+                        <input 
+                            type="tel" 
+                            id="comm-mobile-input" 
+                            class="form-input" 
+                            placeholder="Enter 10-digit mobile number"
+                            maxlength="10"
+                            pattern="[6-9][0-9]{9}"
+                        >
+                        <div class="error-message" id="comm-mobile-error"></div>
+                    </div>
+
+                    <div style="display:flex; gap:10px; flex-wrap:wrap;">
+                        <button type="button" class="btn" id="send-comm-otp-btn">
+                            <span class="spinner"></span>
+                            <span class="btn-text">Send Mobile OTP</span>
+                        </button>
+                        <div class="form-group" style="flex:1; min-width:200px;">
+                            <label class="form-label">Enter Mobile OTP</label>
+                            <input type="text" id="comm-otp-input" class="form-input" placeholder="6-digit OTP" maxlength="6">
+                        </div>
+                        <button type="button" class="btn btn-primary" id="verify-comm-otp-btn">
+                            <span class="spinner"></span>
+                            <span class="btn-text">Verify Mobile</span>
+                        </button>
+                    </div>
+                </form>
+            </div>
+
+            <!-- Step 3: Choose ABHA Address -->
+            <div id="step-3" class="card hidden">
+                <h2 style="margin-bottom: 20px; color: var(--dark-blue);">Choose ABHA Address</h2>
+                <p class="help-text" style="margin-bottom: 20px;">Select a suggested address OR create your own custom address</p>
+                
+                <div class="form-group">
+                    <label class="form-label">📋 Available Suggestions (Click to Select)</label>
+                    <div class="suggestion-list" id="suggestion-list">
+                        <!-- Suggestions will be populated here -->
+                    </div>
+                </div>
+
+                <div style="text-align: center; margin: 20px 0; color: var(--text-light); font-weight: 600;">
+                    ━━━━━━━━━━ OR ━━━━━━━━━━
+                </div>
+
+                <div class="form-group">
+                    <label class="form-label">✏️ Create Custom Address</label>
+                    <input 
+                        type="text" 
+                        id="custom-address-input" 
+                        class="form-input" 
+                        placeholder="Type your custom ABHA address (8-18 characters)"
+                        pattern="[a-z0-9._]{8,18}"
+                    >
+                    <div class="error-message" id="address-error"></div>
+                    <p class="help-text">Use lowercase letters, numbers, dots, and underscores • Real-time validation active</p>
+                </div>
+                
+                <button type="button" class="btn btn-primary" id="create-address-btn">
+                    <span class="spinner"></span>
+                    <span class="btn-text">Create ABHA Address</span>
+                </button>
+            </div>
+        </div>
+
+        <!-- Login Tab -->
+        <div id="login-tab" class="tab-content">
+            <div class="card">
+                <h2 style="margin-bottom: 20px; color: var(--dark-blue);">Login with Existing ABHA</h2>
+                <p class="help-text" style="margin-bottom: 20px;">Enter your Aadhaar to receive OTP and access your ABHA account</p>
+                
+                <!-- Login Step 1: Aadhaar -->
+                <form id="login-aadhaar-form">
+                    <div class="form-group">
+                        <label class="form-label">Aadhaar Number *</label>
+                        <input 
+                            type="text" 
+                            id="login-aadhaar-input" 
+                            class="form-input" 
+                            placeholder="Enter 12-digit Aadhaar number"
+                            maxlength="12"
+                        >
+                        <div class="error-message" id="login-aadhaar-error"></div>
+                        <p class="help-text">📱 OTP will be sent to your Aadhaar-linked mobile number</p>
+                    </div>
+                    
+                    <button type="submit" class="btn btn-primary" id="login-send-otp-btn">
+                        <span class="spinner"></span>
+                        <span class="btn-text">Send OTP</span>
+                    </button>
+                </form>
+
+                <!-- Login Step 2: OTP (Hidden initially) -->
+                <form id="login-otp-form" class="hidden">
+                    <div class="form-group">
+                        <label class="form-label">Enter OTP *</label>
+                        <input 
+                            type="text" 
+                            id="login-otp-input" 
+                            class="form-input" 
+                            placeholder="Enter 6-digit OTP received on your Aadhaar-linked mobile"
+                            maxlength="6"
+                        >
+                        <div class="error-message" id="login-otp-error"></div>
+                        <p class="help-text">💬 Check your SMS for the OTP</p>
+                    </div>
+
+                    <div class="otp-timer">
+                        <span id="login-timer-text">Time remaining: <strong id="login-timer">05:00</strong></span>
+                        <span id="login-resend-container" class="hidden">
+                            <a href="#" class="resend-link" id="login-resend-otp">Resend OTP</a>
+                        </span>
+                    </div>
+                    
+                    <button type="submit" class="btn btn-primary" id="login-verify-otp-btn">
+                        <span class="spinner"></span>
+                        <span class="btn-text">Verify & Login</span>
+                    </button>
+                </form>
+            </div>
+        </div>
+
+        <!-- Verification tab removed for production -->
+
+        <!-- Success/Profile View (Hidden by default) -->
+        <div id="profile-view" class="hidden">
+            <div class="profile-card">
+                <div class="profile-avatar" id="profile-avatar">👤</div>
+                <div class="profile-name" id="profile-name">Loading...</div>
+                <div class="profile-abha" id="profile-abha"></div>
+                
+                <div class="profile-details">
+                    <div class="profile-detail">
+                        <div class="profile-detail-label">Date of Birth</div>
+                        <div class="profile-detail-value" id="profile-dob">--</div>
+                    </div>
+                    <div class="profile-detail">
+                        <div class="profile-detail-label">Gender</div>
+                        <div class="profile-detail-value" id="profile-gender">--</div>
+                    </div>
+                    <div class="profile-detail">
+                        <div class="profile-detail-label">Mobile</div>
+                        <div class="profile-detail-value" id="profile-mobile">--</div>
+                    </div>
+                    <div class="profile-detail">
+                        <div class="profile-detail-label">Email</div>
+                        <div class="profile-detail-value" id="profile-email">--</div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="card">
+                <h3 style="margin-bottom: 15px;">ABHA Card</h3>
+                <div class="abha-card-qr" id="abha-qr">
+                    <span style="color: #999;">QR Code will appear here</span>
+                </div>
+                <button class="btn btn-primary" id="download-card-btn">
+                    <span class="spinner"></span>
+                    <span class="btn-text">📥 Download ABHA Card</span>
+                </button>
+            </div>
+            <div style="display: flex; gap: 10px; flex-wrap: wrap; margin-top: 10px;">
+                <button class="btn btn-secondary" id="create-another-btn">
+                    Create Another ABHA
+                </button>
+                <button class="btn" id="logout-btn">
+                    Logout
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Toast Notification Container -->
+    <div id="toast-container"></div>
+
+    <!-- Scripts -->
+    <script src="js/utils.js"></script>
+    <script src="js/enrollment.js"></script>
+    <script src="js/login.js"></script>
+    <script src="https://unpkg.com/html5-qrcode@2.3.8/minified/html5-qrcode.min.js"></script>
+    <script src="js/main.js"></script>
+</body>
+</html>

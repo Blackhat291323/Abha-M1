@@ -1,0 +1,14 @@
+M1 Test Cases mapping by Role
+Applicable To ICreation of ABHA Number
+Private Application
+Government Application
+lUsing Aadhaar OTP JUsing Aadhaar Biometrics lUsing Aadhaar Demographics (Offline) lUsing Driving icense Create ABHA Address
+Mandatory Optional NA
+Mandatory Mandatory MMandatory Optional Mandatory Mandatory Optional
+Optional MMandatory Mandatory Optional
+Download ABHA Card
+Prafile Update lverification of ABHA Address
+Scan Health Facility QR Scan User ABHA QR
+Mandatory Optional Mandatory Mandatory
+Mandatory Optional MMandatory Mandatory
+IBy OTP New vs Returning Patients

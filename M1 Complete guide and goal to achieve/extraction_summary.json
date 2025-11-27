@@ -1,0 +1,29 @@
+{
+  "pdf": {
+    "pages": 300,
+    "highlights": [],
+    "output": "M1 Full guide.extracted.txt"
+  },
+  "png": {
+    "lines": 14,
+    "sample": [
+      "M1 Test Cases mapping by Role",
+      "Applicable To ICreation of ABHA Number",
+      "Private Application",
+      "Government Application",
+      "lUsing Aadhaar OTP JUsing Aadhaar Biometrics lUsing Aadhaar Demographics (Offline) lUsing Driving icense Create ABHA Address",
+      "Mandatory Optional NA",
+      "Mandatory Mandatory MMandatory Optional Mandatory Mandatory Optional",
+      "Optional MMandatory Mandatory Optional",
+      "Download ABHA Card",
+      "Prafile Update lverification of ABHA Address"
+    ],
+    "output": "Table.extracted.txt"
+  },
+  "xlsx": {
+    "sheets": [
+      "ABHA CREATION AND VERIFICATION"
+    ],
+    "output": "Copy_of_M1_ABHA_CREATION_AND_VERIFICATION_WITH_APIS_UPDATED_V1_2_7_Aug_1_58de4446bc.extracted.json"
+  }
+}
