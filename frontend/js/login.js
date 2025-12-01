@@ -135,11 +135,10 @@ async function verifyLoginOTP(otp) {
     // Stop OTP timer
     stopLoginOTPTimer();
     
-    // Check if ABHA exists
+    // Only show 'No ABHA found' if response is successful but abhaExists is false
     if (data.abhaExists) {
       console.log('✅ ABHA exists, logging in...');
       showToast('Login successful!', 'success');
-      
       // Store token for session persistence
       if (data.token) {
         sessionStorage.setItem('abhaToken', data.token);
@@ -147,17 +146,15 @@ async function verifyLoginOTP(otp) {
         sessionStorage.setItem('abhaAddress', data.abhaAddress);
         console.log('💾 Session saved:', { token: data.token.substring(0, 20) + '...', abhaNumber: data.abhaNumber });
       }
-      
       // Hide login forms
       hideElement('login-aadhaar-form');
       hideElement('login-otp-form');
-      
       // Load and show profile
       console.log('📋 Loading profile...');
       await loadProfile(data.token);
       console.log('✅ Profile loaded and displayed');
     } else {
-      console.log('❌ No ABHA found for this Aadhaar');
+      // Only show 'No ABHA found' if no error occurred
       showToast('No ABHA found. Please create a new ABHA first.', 'info');
       showError('login-otp-error', 'No ABHA account found for this Aadhaar. Please create one first.');
     }
@@ -169,8 +166,14 @@ async function verifyLoginOTP(otp) {
     if (typeof errorMsg === 'string' && /mobile/i.test(errorMsg)) {
       errorMsg = 'OTP is correct but mobile mismatch. Please ensure you used the Aadhaar linked to this mobile.';
     }
-    showError('login-otp-error', errorMsg);
-    showToast(errorMsg, 'error');
+    // If error is invalid/expired OTP, show that message
+    if (errorMsg.toLowerCase().includes('otp')) {
+      showError('login-otp-error', errorMsg);
+      showToast(errorMsg, 'error');
+    } else {
+      showError('login-otp-error', errorMsg);
+      showToast(errorMsg, 'error');
+    }
   } finally {
     setButtonLoading(button, false);
   }

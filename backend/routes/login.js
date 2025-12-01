@@ -20,9 +20,9 @@ router.post('/send-otp', async (req, res, next) => {
       });
     }
 
-    const encryptedAadhaar = encryptWithPublicKey(validation.aadhaar);
+    const encryptedAadhaar = await encryptWithPublicKey(validation.aadhaar);
 
-    // Use Profile Login OTP request for login flows
+    // Use Profile Login OTP request for login flows - using Aadhaar
     const response = await abdmClient.post('/abha/api/v3/profile/login/request/otp', {
       scope: ['abha-login', 'aadhaar-verify'],
       loginHint: 'aadhaar',
@@ -65,7 +65,7 @@ router.post('/verify-otp', async (req, res, next) => {
       });
     }
 
-    const encryptedOtp = encryptWithPublicKey(otpValidation.otp);
+    const encryptedOtp = await encryptWithPublicKey(otpValidation.otp);
     
     // Use ABHA profile login endpoint for existing users
     const requestBody = {

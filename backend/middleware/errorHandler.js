@@ -14,7 +14,7 @@ const ABDM_ERROR_MESSAGES = {
   'HIS-401': 'Unauthorized access.',
   'HIS-422': 'ABHA Address already exists. Please create with unique ABHA address.',
   'HIS-1000': 'ABHA Number already exists for this Aadhaar.',
-  'loginId': 'Invalid Aadhaar number format.',
+  'loginId': 'This Aadhaar number is not registered with ABHA. Please create a new ABHA account first or verify the number.',
   'loginHint': 'Invalid login method.',
   'authMethod': 'Invalid authentication method.',
 };
